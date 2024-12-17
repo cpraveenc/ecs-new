@@ -1,151 +1,185 @@
-1. Prepare Your New GitHub Repository
-Before making changes in AWS Amplify, ensure the following prerequisites are met for your new repository:
+Here's a **detailed and descriptive draft** for changing the source repository of an application hosted on **AWS Amplify**. This draft includes every step, expected actions, and tips to ensure a smooth transition.
 
-Create or Clone the Repository:
+---
 
-Set up your new repository on GitHub.
-If you already have a repository, ensure it is accessible with proper permissions.
-Push the Code:
+# **Detailed Steps to Change Source Repository in AWS Amplify**
 
-Make sure the new repository contains the same or updated application code.
-Use Git commands to push the code to GitHub:
-git init
-git add .
-git commit -m "Initial commit for new repo"
-git remote add origin https://github.com/username/new-repo.git
-git push -u origin main
-Verify the Branch:
+If your AWS Amplify-hosted application needs to be connected to a different repository, follow these detailed steps to **disconnect the existing repository** and reconnect a new one. Amplify does not currently allow "changing" the repository directly, so this involves reconnecting the app to a new repository.
 
-Ensure that the branch you want Amplify to build from (e.g., main, master, or a feature branch) exists and is up to date.
-Application Build Settings:
+---
 
-Verify your application build settings like package.json (for Node.js apps), build scripts, or other requirements.
-Test Locally:
+## **Step 1: Prepare the New Repository**
 
-Run the application locally to ensure the code compiles and functions correctly before pushing it to AWS Amplify.
-2. Log in to AWS Management Console
-Open a browser and go to the AWS Management Console.
-Sign in using your AWS credentials.
-Navigate to AWS Amplify:
-You can search for "Amplify" in the AWS Console search bar.
-Click on "AWS Amplify" under "Frontend Web and Mobile".
-3. Select Your Existing Amplify Application
-In the Amplify Console, locate the list of existing applications.
-Click on the application name for which you want to change the source repository.
-This will take you to the application details page where you can manage your app settings, builds, and deployments.
-4. Disconnect the Existing Repository
-To unlink the current GitHub repository:
+Before making changes to AWS Amplify, prepare the new repository:
 
-On the left-hand menu, go to "App settings" → "General".
-Under the "Repository" section, you will see the current connected GitHub repository.
-Click on "Disconnect repository".
-Confirm the action in the pop-up dialog box.
-Important Notes:
+1. **Set Up the Code in the New Repository**:
+   - Create a new GitHub repository (or use an existing one).
+   - Push your application code to the repository.  
+   Example:
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial commit for Amplify app"
+   git remote add origin https://github.com/<username>/<new-repo>.git
+   git push -u origin main
+   ```
 
-Disconnecting the repository does not delete your deployment history or environment settings.
-Your application will continue serving the current deployed version until you connect a new repository and redeploy.
-5. Connect to the New GitHub Repository
-Now that you have disconnected the old repository, you need to connect the new one:
+2. **Verify the Branch**:
+   - Ensure the correct branch exists (`main`, `master`, `develop`, etc.) in the new repository.
 
-On the main Amplify application page, click "Connect repository".
-In the repository provider options, select GitHub.
-Authenticate with GitHub
-If you have not previously authorized AWS Amplify, it will prompt you to log in to GitHub.
-AWS Amplify will ask for permissions to access your repositories.
-Grant the required permissions by following the OAuth flow.
-Tip: AWS Amplify only requests access to the repositories you explicitly connect, ensuring security and privacy.
+3. **Test the Code Locally**:
+   - Run the code locally to confirm it works and all build configurations are correct.
 
-6. Choose the New Repository and Branch
-From the list of repositories displayed, select your new GitHub repository.
-Choose the branch you want AWS Amplify to build from (e.g., main, master, develop, or any other branch).
-Click Next to proceed.
-7. Configure Build Settings
-Once the new repository and branch are selected, AWS Amplify will detect the framework or build requirements (e.g., React, Angular, Vue.js) and provide default build settings.
+4. **Review Build Specifications**:
+   - If you are using a custom `amplify.yml` file for build settings, include it in the root directory of the new repository.
 
-Default Build Configuration
-Amplify uses a build specification file (e.g., amplify.yml) to define the build process. Below is a default configuration for a React application:
+---
 
-version: 1
-frontend:
-  phases:
-    preBuild:
-      commands:
-        - npm install
-    build:
-      commands:
-        - npm run build
-  artifacts:
-    baseDirectory: build
-    files:
-      - '**/*'
-  cache:
-    paths:
-      - node_modules/**/*
-PreBuild: Install dependencies (e.g., npm install).
-Build: Run the build script (e.g., npm run build).
-Artifacts: Specify the directory and files to deploy (e.g., build folder for React apps).
-If you need custom build steps:
+## **Step 2: Disconnect the Existing Repository in AWS Amplify**
 
-Click Edit to modify the build settings in the console.
-Alternatively, push a custom amplify.yml file to your new GitHub repository.
-Click Next when the build settings are ready.
+1. **Access the AWS Amplify Console**:
+   - Log in to the **AWS Management Console**.
+   - Open the **Amplify Console** by searching for “Amplify” in the AWS search bar.
 
-8. Review and Deploy
-Review the following:
+2. **Open Your Application**:
+   - From the list of apps, select the application whose repository you want to change.
 
-Repository: Verify the new repository name.
-Branch: Confirm the branch you selected.
-Build Settings: Ensure the build specification file is correct.
-Click Save and Deploy.
+3. **Disconnect the Existing Repository**:
+   - Navigate to **App settings** > **General settings**.
+   - You will see details of the currently connected repository (e.g., GitHub, Bitbucket, etc.).
+   - Since Amplify does not have a "Change repository" option directly, you will need to **delete the app configuration**:
+     - Scroll down to **Delete app**.
+     - Confirm the deletion by typing "delete" in the confirmation dialog.
 
-9. Monitor the Build Process
-Amplify will now start the build process using the new repository and branch.
+**⚠ Note**: Deleting the app configuration will not delete your source code or repository. However, deployment settings will need to be reconfigured.
 
-Monitor the progress:
+---
 
-Go to the "Builds" section under the application details.
-View logs for each step (e.g., Install, Build, Deploy).
-If there are any issues, Amplify will show the exact build errors.
-Wait until the build process completes successfully.
+## **Step 3: Connect the New Repository**
 
-10. Test the Deployed Application
-Once the deployment succeeds:
+After disconnecting the old repository, follow these steps to connect the new repository:
 
-Open the application URL provided by AWS Amplify.
-Verify that the application works as expected.
-Test critical functionalities to ensure the code deployment from the new repository is successful.
-11. Update Environment Variables (If Required)
-If your application relies on environment variables (e.g., API keys, secret tokens, URLs):
+1. **Create a New Amplify App**:
+   - From the Amplify Console main page, click **Create new app**.
+   - Select **Host web app**.
 
-Go to "App settings" → "Environment variables".
-Update or add variables required for the new repository setup.
-Click Save.
-Trigger Redeployment:
-Save changes and click "Redeploy" to ensure the updated environment variables are applied.
-12. Best Practices and Cleanup
-Backup Old Configurations:
+2. **Select GitHub as the Source Provider**:
+   - Choose **GitHub** as your repository provider.
+   - If this is your first time using GitHub with Amplify, you will need to install and authorize the **Amplify GitHub App**.
 
-Take a screenshot or note down your old build settings and environment variables.
-Repository Permissions:
+   **Steps to Authorize**:
+   - Click **Authorize AWS Amplify** when prompted.
+   - Install the Amplify GitHub App and grant access to your **new repository**.
+   - The link for manual installation is typically:  
+     ```
+     https://github.com/apps/aws-amplify-<region>/installations/new
+     ```
+     Replace `<region>` with your deployment region.
 
-Verify that the GitHub repository permissions are restricted to only necessary users.
-Clean Up Old Repository:
+3. **Select the New Repository and Branch**:
+   - After authorization, Amplify will display a list of your GitHub repositories.
+   - Choose the **new repository** and the branch you wish to connect (e.g., `main` or `develop`).
+   - Click **Next**.
 
-Archive or delete the old repository if no longer required.
-Version Control:
+---
 
-Use feature branches in the new repository to safely test and deploy changes.
-Troubleshooting Common Issues
-Build Fails:
+## **Step 4: Review and Configure Build Settings**
 
-Check build logs for errors.
-Ensure dependencies (e.g., Node.js, Python) are compatible and updated.
-Missing Permissions:
+AWS Amplify will attempt to auto-detect the build settings for your project. Follow these steps to confirm or customize them:
 
-Re-authorize GitHub access for AWS Amplify.
-Environment Variable Errors:
+1. **Build Settings Detection**:
+   - Amplify will analyze your project (e.g., React, Angular, Vue) and suggest default build settings.
+   - Review the default configuration or edit it as needed.
 
-Verify that all required environment variables are set in AWS Amplify.
-Incorrect Branch:
+2. **Example Build Specification** (React):
+   If your project uses React, your build settings (`amplify.yml`) might look like this:
 
-Double-check that the correct branch is selected in the Amplify settings.
+   ```yaml
+   version: 1
+   frontend:
+     phases:
+       preBuild:
+         commands:
+           - npm install
+       build:
+         commands:
+           - npm run build
+     artifacts:
+       baseDirectory: build
+       files:
+         - '**/*'
+     cache:
+       paths:
+         - node_modules/**/*
+   ```
+
+3. **Save Build Configuration**:
+   - Review the configuration and confirm.
+   - If you use a custom `amplify.yml` file, ensure it is stored in the root of your repository.
+
+---
+
+## **Step 5: Deploy the Application**
+
+1. **Review the App Configuration**:
+   - On the "Review" page, verify:
+     - Repository name and branch.
+     - Build settings.
+   - Click **Save and Deploy**.
+
+2. **Monitor the Build Process**:
+   - Amplify will start building the application using the code from your new repository.
+   - You can monitor progress on the **Builds** page.
+
+3. **Verify the Deployment**:
+   - Once the build completes, Amplify will provide a URL to access the deployed application.
+   - Test the application to ensure all features are working correctly.
+
+---
+
+## **Step 6: Configure Environment Variables (If Required)**
+
+If your application uses environment variables:
+
+1. Go to **App settings** > **Environment variables**.
+2. Add any environment variables required by the new repository.
+   - For example:
+     ```text
+     API_URL=https://api.example.com
+     NODE_ENV=production
+     ```
+3. Click **Save** and trigger a **Redeploy** to apply the changes.
+
+---
+
+## **Step 7: Clean Up (Optional)**
+
+- If the old repository or deployment is no longer needed, clean up by:
+  1. Removing the Amplify App configurations related to the old repository.
+  2. Deleting unused IAM roles, S3 buckets, or CloudFront distributions created by the previous app.
+
+---
+
+## **Troubleshooting Tips**
+
+1. **Repository Not Showing Up**:
+   - Ensure the Amplify GitHub App has access to the new repository.
+   - Reauthorize the GitHub App if necessary.
+
+2. **Build Fails**:
+   - Check the build logs in Amplify Console for errors.
+   - Verify your new repository contains all required files (`package.json`, `amplify.yml`, etc.).
+
+3. **Environment Variables Missing**:
+   - Re-add all necessary environment variables in Amplify Console.
+
+4. **Custom Domains**:
+   - If you had a custom domain configured, reconnect it under **App settings → Custom domains**.
+
+---
+
+## **Final Notes**
+
+By following this step-by-step process, you will effectively change the source repository for your AWS Amplify application. Although Amplify does not directly support "changing" repositories, the process of reconnecting ensures your app can be hosted seamlessly with the new repository.
+
+Let me know if you need clarification on any step or further assistance! 🚀
